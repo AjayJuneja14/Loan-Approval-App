@@ -2,18 +2,14 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# ============================================================
-# Page config
-# ============================================================
+
 st.set_page_config(
     page_title="Loan Approval Predictor",
     page_icon="💰",
     layout="wide",
 )
 
-# ============================================================
-# Custom CSS
-# ============================================================
+
 st.markdown("""
 <style>
     .main-header {
@@ -80,9 +76,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ============================================================
-# Load saved artifacts
-# ============================================================
+
 @st.cache_resource
 def load_artifacts():
     return {
@@ -96,15 +90,12 @@ def load_artifacts():
 
 art = load_artifacts()
 
-# ============================================================
-# Header
-# ============================================================
+
 st.markdown('<p class="main-header">💰 Loan Approval Predictor</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-header">Fill in the applicant\'s details below and get an instant prediction.</p>', unsafe_allow_html=True)
 
-# ============================================================
-# Input form — grouped into sections with tabs
-# ============================================================
+
+
 tab1, tab2, tab3 = st.tabs(["👤 Personal", "💵 Financial", "🏠 Loan Details"])
 
 with tab1:
@@ -142,9 +133,7 @@ with tab3:
 st.write("")
 predict_clicked = st.button("🔮 Predict Loan Approval", use_container_width=True)
 
-# ============================================================
-# Prediction
-# ============================================================
+
 if predict_clicked:
     raw = pd.DataFrame([{
         "Applicant_Income": applicant_income,
@@ -165,9 +154,7 @@ if predict_clicked:
         "Property_Area": property_area,
     }])
 
-    # Apply the SAME preprocessing as training
-    # (Education_Level is skipped here — see note above; it'll be filled
-    # with 0 automatically at the reindex step below)
+
 
     encoded = art["ohe"].transform(raw[art["onehot_input_cols"]])
     encoded_df = pd.DataFrame(encoded, columns=art["ohe"].get_feature_names_out(art["onehot_input_cols"]))
